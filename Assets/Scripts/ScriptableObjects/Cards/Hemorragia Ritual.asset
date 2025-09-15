@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83a7558060d5a6748a2d867464b42841, type: 3}
+  m_Name: Hemorragia Ritual
+  m_EditorClassIdentifier: 
+  ID: hemorragia
+  Descricao: Causa 18 de Dano, mas consome 5 de Vida
+  Tipo: 2
+  Sprite: {fileID: 21300000, guid: 5de74714a7c66a04982bc440d69806a4, type: 3}
+  Pontos: 18
+  Custo: 5
+  TipoCusto: 1
