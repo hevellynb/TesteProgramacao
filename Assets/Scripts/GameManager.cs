@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private GameObject GameOverScreen; //VARIAVEL PRIVADA DA TELA DE DERROTA
+    [SerializeField]
+    private GameObject VictoryScreen; // VARIÁVEL PRIVADA DA TELA DE VITÓRIA
 
     [Header("Variáveis do Jogador")]
     [SerializeField]
@@ -74,6 +76,7 @@ public class GameManager : MonoBehaviour
     public void OnWinGame()
     {
         m_gameState = GameState.CHALLENGE_WON;
+        VictoryScreen.SetActive(true); // ATIVA A TELA DE VITÓRIA
     }
 
     private void OnLostGame()
