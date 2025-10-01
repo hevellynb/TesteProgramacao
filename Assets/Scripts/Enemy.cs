@@ -48,5 +48,10 @@ public class Enemy : MonoBehaviour
     public void AtualizaBarraVida()
     {
         m_enemyHPBar.fillAmount = m_enemyLife / m_enemyInfo.Vida;
+
+        if (m_enemyLife <= 0)
+        {
+            GameManager.instance.GameWon();
+        }
     }
 }

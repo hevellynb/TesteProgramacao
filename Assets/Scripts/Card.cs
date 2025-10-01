@@ -89,22 +89,58 @@ public class Card : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
 
     public virtual void FazAcao()
     {
-        //AQUI ENTRA A AÇÃO DA CARTA DE ACORDO COM SEU TIPO
+        if (CardInfo.Custo > 0)
+        {
+            switch (CardInfo.TipoCusto)
+            {
+                case TipoCusto.MANA:
+                    if (GameManager.instance.PlayerMana >= CardInfo.Custo)
+                    {
+                        GameManager.instance.ConsumirMana(CardInfo.Custo);
+                    }
+                    else
+                    {
+                        Debug.Log("Mana insuficiente!");
+                        return;
+                    }
+                    break;
+
+                case TipoCusto.VIDA:
+                    GameManager.instance.TomarDano(CardInfo.Custo);
+                    break;
+            }
+        }
+
         switch (CardInfo.ID)
         {
             case "estocada":
+                int dano = CardInfo.Pontos;
+                if (GameManager.instance.DoubleDamageNextAttack)
+                {
+                    dano *= 2;
+                    GameManager.instance.DoubleDamageNextAttack = false;
+                }
+                RoundManager.instance.CurrentEnemy.TomarDano(dano);
+                break;
+
+            case "hemorragia":
                 RoundManager.instance.CurrentEnemy.TomarDano(CardInfo.Pontos);
                 break;
-            case "hemorragia":
-                break;
+
             case "passo":
+                GameManager.instance.DoubleDamageNextAttack = true;
+                Debug.Log("Proximo golpe tera dano dobrado!");
                 break;
+
             case "salto":
                 break;
+
             case "frasco":
+                GameManager.instance.GanharMana(CardInfo.Pontos);
                 break;
         }
-        if(CardInfo.Tipo == Tipo.GOLPE)
+
+        if (CardInfo.Tipo == Tipo.GOLPE)
         {
             DoAttackAnimation(m_cardVisual.transform);
         }
@@ -252,3 +288,4 @@ public class Card : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
         m_isCardCheck = true;
     }
 }
+
