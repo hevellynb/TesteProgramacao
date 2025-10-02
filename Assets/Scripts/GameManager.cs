@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // opcional: mantém entre cenas
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -27,8 +27,9 @@ public class GameManager : MonoBehaviour
     [Space(10)]
     private GameState m_gameState = GameState.IN_MAP;
 
-    [SerializeField] private GameObject GameOverScreen; // TELA DE DERROTA
-    [SerializeField] private GameObject VictoryScreen;  // TELA DE VITÓRIA
+    [SerializeField] private GameObject GameOverScreen;   // Tela de derrota
+    [SerializeField] private GameObject VictoryScreen;    // Tela de vitória
+    [SerializeField] private GameObject PauseMenuUI;      // Tela de pause
 
     [Header("Variáveis do Jogador")]
     [SerializeField] private float m_playerLife;     // VIDA ATUAL
@@ -48,20 +49,49 @@ public class GameManager : MonoBehaviour
     public float PlayerMana => m_playerMana;
 
     private bool m_doubleDamageNextAttack = false;
+    private bool m_gameIsPaused = false;
 
     private void Start()
     {
         m_playerLife = m_playerMaxLife;
         m_playerMana = m_playerMaxMana;
         AtualizaPlayerUI();
+
+        if (PauseMenuUI != null)
+            PauseMenuUI.SetActive(false);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            // TODO: implementar menu de pause
+            if (m_gameIsPaused)
+                ResumeGame();
+            else
+                PauseGame();
         }
+    }
+
+    public void PauseGame()
+    {
+        if (PauseMenuUI != null)
+            PauseMenuUI.SetActive(true);
+
+        Time.timeScale = 0f;
+        m_gameIsPaused = true;
+        m_gameState = GameState.PAUSED;
+    }
+
+    public void ResumeGame()
+    {
+        if (PauseMenuUI != null)
+            PauseMenuUI.SetActive(false);
+
+        Time.timeScale = 1f;
+        m_gameIsPaused = false;
+
+        // volta para o estado anterior ao pause (se quiser guardar isso em uma var extra)
+        m_gameState = GameState.IN_CHALLENGE;
     }
 
     // === UI ===
@@ -111,6 +141,8 @@ public class GameManager : MonoBehaviour
     public void TryAgain()
     {
         GameOverScreen.gameObject.SetActive(false);
+        PauseMenuUI.gameObject.SetActive(false);
+        VictoryScreen.SetActive(false);
         StartGame();
     }
 
@@ -173,5 +205,6 @@ public enum GameState
     CHALLENGE_WON,
     CHALLENGE_LOST,
     IN_STORE,
-    IN_MAP
+    IN_MAP, 
+    PAUSED
 }
